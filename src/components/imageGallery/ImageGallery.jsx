@@ -53,7 +53,7 @@ export class ImageGallery extends Component {
     return (
       <div
         style={{
-          margin: '0 auto',
+          textAlign: 'center',
         }}
       >
         {this.state.loading && <Loader />}
