@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import { ImageGalleryItem } from 'components/imageGalleryItem/ImageGalleryItem';
 import { Loader } from 'components/loader/Loader';
+import { ImageGalleryUl } from './ImageGallery.styled';
 const API_KEY = '35290900-56ffde2696ef97590bed2c34b';
 const URL = `https://pixabay.com/api/`;
 
@@ -17,7 +18,7 @@ export class ImageGallery extends Component {
     if (prevProps.searchQuery !== this.props.searchQuery) {
       this.setState({ loading: true, images: null });
       fetch(
-        `${URL}?q=${this.props.searchQuery}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${this.perPage}`
+        `${URL}?q=${this.props.searchQuery}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${this.state.perPage}`
       )
         .then(response => response.json())
         .then(({ hits }) => {
@@ -34,10 +35,14 @@ export class ImageGallery extends Component {
 
   render() {
     return (
-      <>
+      <div
+        style={{
+          margin: '0 auto',
+        }}
+      >
         {this.state.loading && <Loader />}
         {this.state.images && (
-          <ul className="gallery">
+          <ImageGalleryUl className="gallery">
             {this.state.images.map(image => {
               return (
                 <ImageGalleryItem
@@ -47,9 +52,9 @@ export class ImageGallery extends Component {
                 />
               );
             })}
-          </ul>
+          </ImageGalleryUl>
         )}
-      </>
+      </div>
     );
   }
 }
