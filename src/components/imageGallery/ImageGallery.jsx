@@ -2,25 +2,36 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import { ImageGalleryItem } from 'components/imageGalleryItem/ImageGalleryItem';
 import { Loader } from 'components/loader/Loader';
+import { Button } from 'components/button/Button';
 import { ImageGalleryUl } from './ImageGallery.styled';
-const API_KEY = '35290900-56ffde2696ef97590bed2c34b';
-const URL = `https://pixabay.com/api/`;
+import { fetchGalleryImg } from '../../Api/fetchGalleryImg';
 
 export class ImageGallery extends Component {
   state = {
     images: null,
     loading: false,
     page: 1,
-    perPage: 12,
+  };
+
+  onFindMore = () => {
+    this.setState({ page: this.state.page + 1 });
+    this.setState({ loading: true });
+
+    fetchGalleryImg(this.props.searchQuery, this.state.page)
+      .then(({ hits }) => {
+        this.setState(prevState => ({
+          images: [...prevState.images, ...hits],
+        }));
+      })
+      .catch(error => this.setState({ error }))
+      .finally(() => this.setState({ loading: false }));
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchQuery !== this.props.searchQuery) {
-      this.setState({ loading: true, images: null });
-      fetch(
-        `${URL}?q=${this.props.searchQuery}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${this.state.perPage}`
-      )
-        .then(response => response.json())
+      this.setState({ loading: true, images: null, page: 1 });
+
+      fetchGalleryImg(this.props.searchQuery, this.state.page)
         .then(({ hits }) => {
           if (hits.length === 0) {
             toast.error(
@@ -41,6 +52,7 @@ export class ImageGallery extends Component {
         }}
       >
         {this.state.loading && <Loader />}
+
         {this.state.images && (
           <ImageGalleryUl className="gallery">
             {this.state.images.map(image => {
@@ -54,6 +66,7 @@ export class ImageGallery extends Component {
             })}
           </ImageGalleryUl>
         )}
+        {this.state.images && <Button onFindMore={() => this.onFindMore()} />}
       </div>
     );
   }
