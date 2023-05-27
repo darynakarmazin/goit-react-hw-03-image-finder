@@ -14,8 +14,10 @@ export class ImageGallery extends Component {
   };
 
   onFindMore = () => {
-    this.setState({ page: this.state.page + 1 });
-    this.setState({ loading: true });
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+      loading: true,
+    }));
 
     fetchGalleryImg(this.props.searchQuery, this.state.page)
       .then(({ hits }) => {
@@ -37,7 +39,10 @@ export class ImageGallery extends Component {
             toast.error(
               'Sorry, there are no images matching your search query. Please try again.'
             );
-          } else this.setState({ images: hits });
+          } else
+            this.setState(prevState => ({
+              images: [...hits],
+            }));
         })
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ loading: false }));
@@ -54,10 +59,11 @@ export class ImageGallery extends Component {
         {this.state.loading && <Loader />}
 
         {this.state.images && (
-          <ImageGalleryUl className="gallery">
+          <ImageGalleryUl>
             {this.state.images.map(image => {
               return (
                 <ImageGalleryItem
+                  showModal={() => this.props.showModal(image.largeImageURL)}
                   key={image.id}
                   smallImg={image.webformatURL}
                   alt={image.tags}
