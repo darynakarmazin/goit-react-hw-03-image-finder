@@ -3,12 +3,18 @@ import { Overlay, ModalImg } from './Modal.styled';
 
 export class Modal extends Component {
   componentDidMount() {
-    window.addEventListener('keydown', event => {
-      if (event.code === 'Escape') {
-        this.props.closeModal();
-      }
-    });
+    window.addEventListener('keydown', this.handleKeyDown);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = event => {
+    if (event.code === 'Escape') {
+      this.props.closeModal();
+    }
+  };
 
   render() {
     return (
