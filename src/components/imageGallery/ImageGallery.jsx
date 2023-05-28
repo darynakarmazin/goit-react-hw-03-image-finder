@@ -12,21 +12,29 @@ export class ImageGallery extends Component {
     images: null,
     loading: false,
     page: 1,
+    hiddenBnt: false,
   };
 
   onFindMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
       loading: true,
+      hiddenBnt: false,
     }));
 
     // Микрозадача => в макрозадачу
     setTimeout(() => {
       fetchGalleryImg(this.props.searchQuery, this.state.page)
         .then(({ hits }) => {
-          this.setState(prevState => ({
-            images: [...prevState.images, ...hits],
-          }));
+          if (hits.length === 0) {
+            toast.error(
+              'Sorry, there are no more images matching your search query. Please try again.'
+            );
+            this.setState({ hiddenBnt: true });
+          } else
+            this.setState(prevState => ({
+              images: [...prevState.images, ...hits],
+            }));
         })
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ loading: false }));
@@ -35,7 +43,7 @@ export class ImageGallery extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchQuery !== this.props.searchQuery) {
-      this.setState({ loading: true, images: null, page: 1 });
+      this.setState({ loading: true, images: null, page: 1, hiddenBnt: false });
 
       // Микрозадача => в макрозадачу
       setTimeout(() => {
@@ -77,7 +85,9 @@ export class ImageGallery extends Component {
             })}
           </ImageGalleryUl>
         )}
-        {this.state.images && <Button onFindMore={() => this.onFindMore()} />}
+        {this.state.images && this.state.hiddenBnt === false && (
+          <Button onFindMore={() => this.onFindMore()} />
+        )}
       </div>
     );
   }
