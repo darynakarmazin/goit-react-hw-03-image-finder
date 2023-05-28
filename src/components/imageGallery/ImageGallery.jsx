@@ -20,6 +20,7 @@ export class ImageGallery extends Component {
       loading: true,
     }));
 
+    // Микрозадача => в макрозадачу
     setTimeout(() => {
       fetchGalleryImg(this.props.searchQuery, this.state.page)
         .then(({ hits }) => {
@@ -36,6 +37,7 @@ export class ImageGallery extends Component {
     if (prevProps.searchQuery !== this.props.searchQuery) {
       this.setState({ loading: true, images: null, page: 1 });
 
+      // Микрозадача => в макрозадачу
       setTimeout(() => {
         fetchGalleryImg(this.props.searchQuery, this.state.page)
           .then(({ hits }) => {
