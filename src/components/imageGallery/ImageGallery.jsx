@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { ImageGalleryItem } from 'components/imageGalleryItem/ImageGalleryItem';
 import { Loader } from 'components/loader/Loader';
 import { Button } from 'components/button/Button';
-import { ImageGalleryUl } from './ImageGallery.styled';
+import { ImageGalleryUl, Container } from './ImageGallery.styled';
 import { fetchGalleryImg } from '../../Api/fetchGalleryImg';
 
 export class ImageGallery extends Component {
@@ -63,12 +63,7 @@ export class ImageGallery extends Component {
 
   render() {
     return (
-      <div
-        style={{
-          margin: '0 auto',
-          textAlign: 'center',
-        }}
-      >
+      <Container>
         {this.state.loading && <Loader />}
 
         {this.state.images && (
@@ -88,7 +83,7 @@ export class ImageGallery extends Component {
         {this.state.images && this.state.hiddenBnt === false && (
           <Button onFindMore={() => this.onFindMore()} />
         )}
-      </div>
+      </Container>
     );
   }
 }

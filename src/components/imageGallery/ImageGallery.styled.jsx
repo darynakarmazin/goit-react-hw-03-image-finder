@@ -15,3 +15,8 @@ export const ImageGalleryUl = styled.ul`
   margin-left: auto;
   margin-right: auto;
 `;
+
+export const Container = styled.div`
+  margin: 0 auto;
+  text-align: center;
+`;
