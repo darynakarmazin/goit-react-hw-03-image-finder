@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { ImageGalleryItem } from 'components/imageGalleryItem/ImageGalleryItem';
 import { Loader } from 'components/loader/Loader';
@@ -79,3 +80,7 @@ export class ImageGallery extends Component {
     );
   }
 }
+
+ImageGallery.propTypes = {
+  searchQuery: PropTypes.string.isRequired,
+};

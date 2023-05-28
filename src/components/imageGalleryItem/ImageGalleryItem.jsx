@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ImageGalleryItemLi } from './ImageGalleryItem.styled';
 
 export class ImageGalleryItem extends Component {
@@ -10,3 +11,9 @@ export class ImageGalleryItem extends Component {
     );
   }
 }
+
+ImageGalleryItem.propTypes = {
+  smallImg: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+};
+

@@ -7,3 +7,4 @@ export function fetchGalleryImg(searchQuery, page) {
     `${URL}?q=${searchQuery}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${PerPage}&page=${page}`
   ).then(response => response.json());
 }
+
