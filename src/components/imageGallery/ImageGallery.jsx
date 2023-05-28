@@ -28,7 +28,7 @@ export class ImageGallery extends Component {
         })
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ loading: false }));
-    }, 0);
+    });
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -46,7 +46,7 @@ export class ImageGallery extends Component {
           })
           .catch(error => this.setState({ error }))
           .finally(() => this.setState({ loading: false }));
-      }, 0);
+      });
     }
   }
 
