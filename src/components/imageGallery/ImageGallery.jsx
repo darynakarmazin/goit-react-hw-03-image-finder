@@ -19,33 +19,34 @@ export class ImageGallery extends Component {
       loading: true,
     }));
 
-    fetchGalleryImg(this.props.searchQuery, this.state.page)
-      .then(({ hits }) => {
-        this.setState(prevState => ({
-          images: [...prevState.images, ...hits],
-        }));
-      })
-      .catch(error => this.setState({ error }))
-      .finally(() => this.setState({ loading: false }));
+    setTimeout(() => {
+      fetchGalleryImg(this.props.searchQuery, this.state.page)
+        .then(({ hits }) => {
+          this.setState(prevState => ({
+            images: [...prevState.images, ...hits],
+          }));
+        })
+        .catch(error => this.setState({ error }))
+        .finally(() => this.setState({ loading: false }));
+    }, 0);
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchQuery !== this.props.searchQuery) {
       this.setState({ loading: true, images: null, page: 1 });
 
-      fetchGalleryImg(this.props.searchQuery, this.state.page)
-        .then(({ hits }) => {
-          if (hits.length === 0) {
-            toast.error(
-              'Sorry, there are no images matching your search query. Please try again.'
-            );
-          } else
-            this.setState(prevState => ({
-              images: [...hits],
-            }));
-        })
-        .catch(error => this.setState({ error }))
-        .finally(() => this.setState({ loading: false }));
+      setTimeout(() => {
+        fetchGalleryImg(this.props.searchQuery, this.state.page)
+          .then(({ hits }) => {
+            if (hits.length === 0) {
+              toast.error(
+                'Sorry, there are no images matching your search query. Please try again.'
+              );
+            } else this.setState({ images: hits });
+          })
+          .catch(error => this.setState({ error }))
+          .finally(() => this.setState({ loading: false }));
+      }, 0);
     }
   }
 
@@ -53,6 +54,7 @@ export class ImageGallery extends Component {
     return (
       <div
         style={{
+          margin: '0 auto',
           textAlign: 'center',
         }}
       >
