@@ -15,6 +15,10 @@ export class ImageGallery extends Component {
     hiddenBnt: false,
   };
 
+  showErrorMsg = () => {
+    toast.error('Sorry, there are no more images matching your search query.');
+  };
+
   onFindMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
@@ -27,9 +31,7 @@ export class ImageGallery extends Component {
       fetchGalleryImg(this.props.searchQuery, this.state.page)
         .then(({ hits, totalHits }) => {
           if (hits.length === 0) {
-            toast.error(
-              'Sorry, there are no more images matching your search query. Please try again.'
-            );
+            this.showErrorMsg();
             this.setState({ hiddenBnt: true });
           } else
             this.setState(prevState => ({
@@ -37,9 +39,7 @@ export class ImageGallery extends Component {
             }));
           if (12 * this.state.page > totalHits) {
             this.setState({ hiddenBnt: true });
-            toast.error(
-              'Sorry, there are no more images matching your search query.'
-            );
+            this.showErrorMsg();
           }
         })
         .catch(error => this.setState({ error }))
@@ -56,9 +56,7 @@ export class ImageGallery extends Component {
         fetchGalleryImg(this.props.searchQuery, this.state.page)
           .then(({ hits }) => {
             if (hits.length === 0) {
-              toast.error(
-                'Sorry, there are no images matching your search query. Please try again.'
-              );
+              this.showErrorMsg();
             } else this.setState({ images: hits });
           })
           .catch(error => this.setState({ error }))
@@ -86,7 +84,7 @@ export class ImageGallery extends Component {
             })}
           </ImageGalleryUl>
         )}
-        {this.state.images && this.state.hiddenBnt === false && (
+        {this.state.images && !this.state.hiddenBnt && (
           <Button onFindMore={() => this.onFindMore()} />
         )}
       </Container>
